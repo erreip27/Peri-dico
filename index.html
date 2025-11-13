@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revista Digital Paginada – IE Siete de Agosto</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ---------------------------------------------------------------------- */
+    /* CSS CORE V4.0 (Ajustado para el sistema de páginas) */
+    /* ---------------------------------------------------------------------- */
+
+    /* VARIABLES GLOBALES */
+    :root{
+      --color-primario: #002543;     
+      --color-secundario: #D60000;   
+      --color-claro: #ffffff;
+      --color-fondo-claro: #f1f5f9;  
+      --texto-oscuro: #121212;
+      --card-bg: var(--color-claro);
+      --page-bg: var(--color-fondo-claro); 
+      --sombra-card: 0 16px 48px rgba(0, 0, 0, 0.18), 0 0 1px rgba(0, 0, 0, 0.08);
+      --sombra-boton: 0 8px 18px rgba(0, 0, 0, 0.2);
+      --sombra-menu: 4px 0 20px rgba(0, 0, 0, 0.3); /* Nueva sombra para el menú */
+      --anim-duration: 0.9s;
+      --anim-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --menu-width: 280px; /* Ancho del menú */
+    }
+    
+    /* RESET Y TIPOGRAFÍA BASE */
+    *, ::before, ::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: var(--page-bg);
+      color: var(--texto-oscuro);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-secundario) var(--color-fondo-claro);
+      overflow-x: hidden;
+    }
+    body::-webkit-scrollbar { width: 10px; }
+    body::-webkit-scrollbar-track { background: var(--color-fondo-claro); }
+    body::-webkit-scrollbar-thumb {
+      background-color: var(--color-secundario);
+      border-radius: 20px;
+      border: 3px solid var(--color-fondo-claro);
+    }
+
+    html { scroll-behavior: smooth; }
+    a { color: inherit; text-decoration: none; }
+    main { flex-grow: 1; }
+
+    /* Animaciones y Header se mantienen igual */
+    @keyframes net-flow {
+        0% { background-position: 0 0; }
+        100% { background-position: 50vw 50vh; }
+    }
+    body {
+      background-image: 
+          radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+          linear-gradient(135deg, var(--color-fondo-claro) 0%, #e8edf3 100%);
+      background-size: 80px 80px, 100% 100%;
+      animation: net-flow 80s linear infinite;
+    }
+    @keyframes bannerSlideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, var(--color-primario) 0%, #004d7c 100%);
+      color: var(--color-claro);
+      padding: 35px 18px;
+      position: relative;
+      border-bottom: 8px solid var(--color-secundario);
+      animation: bannerSlideIn 1.5s var(--anim-ease) both;
+      overflow: hidden;
+    }
+    .banner-inner { max-width: 1280px; margin: 0 auto; display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+    header .logo { width: 110px; height: 110px; border-radius: 50%; background: var(--color-claro); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3), var(--sombra-card); flex: 0 0 110px; overflow: hidden; transition: transform 0.4s ease-in-out; }
+    header .logo:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 0 8px var(--color-secundario), var(--sombra-card); }
+    header .logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+    header h1 { font-family: 'Playfair', serif; font-size: 2.6rem; font-weight: 900; line-height: 1.1; margin: 0; text-transform: uppercase; animation: neon-glow 4s ease-in-out infinite alternate; }
+    @keyframes neon-glow {
+        0%, 100% { text-shadow: 0 0 1px var(--color-claro), 0 0 6px var(--color-secundario), 0 0 12px rgba(214, 0, 0, 0.4); }
+        50% { text-shadow: 0 0 2px var(--color-claro), 0 0 12px var(--color-secundario), 0 0 25px rgba(214, 0, 0, 0.8); }
+    }
+    header .sub { font-weight: 600; font-size: 1.15rem; margin-top: 5px; color: var(--color-secundario); letter-spacing: 1px; }
+
+    /* --- NUEVOS ESTILOS PARA EL MENÚ LATERAL --- */
+    
+    /* Botón Hamburguesa */
+    #menuToggleBtn {
+        position: absolute;
+        top: 25px;
+        left: 20px;
+        width: 45px;
+        height: 45px;
+        background: var(--color-secundario);
+        color: var(--color-claro);
+        border: none;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        font-weight: 900;
+        cursor: pointer;
+        z-index: 1001; /* Sobre el header */
+        box-shadow: var(--sombra-boton);
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    #menuToggleBtn:hover {
+        transform: scale(1.1);
+        background: #a90000;
+    }
+    
+    /* Contenedor principal para ajuste de desplazamiento */
+    .content-wrapper {
+        display: flex; /* Para que el menú y el contenido queden lado a lado (virtualmente) */
+        position: relative;
+        /* El wrapper contendrá main y footer */
+        transition: transform 0.5s var(--anim-ease); 
+    }
+    
+    .menu-open .content-wrapper {
+        /* Desplaza todo el contenido a la derecha */
+        transform: translateX(var(--menu-width));
+    }
+
+    /* Menú Lateral */
+    #side-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: var(--menu-width);
+        height: 100%;
+        background: var(--color-primario);
+        color: var(--color-claro);
+        padding-top: 130px; /* Espacio para el header */
+        box-shadow: var(--sombra-menu);
+        z-index: 1000;
+        transform: translateX(-100%); /* Inicialmente oculto a la izquierda */
+        transition: transform 0.5s var(--anim-ease);
+        overflow-y: auto;
+    }
+    
+    .menu-open #side-menu {
+        transform: translateX(0); /* Muestra el menú */
+    }
+
+    #menu-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    #menu-list li a {
+        display: block;
+        padding: 15px 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: background 0.2s ease, padding-left 0.2s ease;
+        line-height: 1.3;
+    }
+    
+    #menu-list li a:hover, #menu-list li.current-page a {
+        background: var(--color-secundario);
+        padding-left: 35px;
+        font-weight: 600;
+    }
+
+    /* Ajuste del banner para que el botón esté a la izquierda */
+    header .banner-inner {
+        max-width: 1280px; 
+        margin: 0 auto; 
+        display: flex; 
+        gap: 30px; 
+        align-items: center; 
+        flex-wrap: wrap; 
+        position: relative; /* Para el posicionamiento del botón */
+        padding-left: 70px; /* Dejar espacio para el botón */
+    }
+
+    /* -------------------------- */
+    /* SECCIONES / PÁGINAS (Main ajustado) */
+    /* -------------------------- */
+    main {
+        max-width: 100%; /* Ajuste al tomar todo el ancho del wrapper */
+    }
+
+    .section-card {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px;
+      border-radius: 12px;
+      background: var(--card-bg);
+      box-shadow: var(--sombra-card);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      min-height: 600px; /* Para que la "página" tenga cuerpo */
+      animation: fadeIn 0.8s ease-out;
+      display: none; /* Inicia oculto, JS lo controla */
+    }
+    
+    /* Estilos internos de secciones (mantener) */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pageFlipIn {
+      from { transform: rotateY(-90deg) scale(0.9); opacity: 0; }
+      to { transform: rotateY(0deg) scale(1); opacity: 1; }
+    }
+    .section-card.active.flip-animate {
+        animation: pageFlipIn 0.7s var(--anim-ease) both;
+        transform-origin: left center; 
+    }
+    .section-card.active {
+        display: block; 
+    }
+    .section-card:nth-child(even) { border-left: 6px solid var(--color-secundario); background: #fafafa; }
+    .section-card:nth-child(odd) { border-right: 6px solid var(--color-primario); }
+    h2 { font-family: 'Playfair', serif; color: var(--color-primario); margin-bottom: 25px; font-size: 2.2rem; font-weight: 800; position: relative; padding-bottom: 15px; }
+    h2::after { content: ''; position: absolute; left: 0; bottom: 0; height: 4px; width: 50px; background-color: var(--color-secundario); border-radius: 2px; }
+    p { font-size: 1rem; margin-bottom: 15px; }
+    .galeria { display: grid; gap: 22px; margin-top: 30px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: stretch; }
+    .galeria img { width: 100%; height: 280px; object-fit: cover; border-radius: 8px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); cursor: zoom-in; filter: grayscale(80%) brightness(0.9); transition: transform 0.5s var(--anim-ease), box-shadow 0.5s, filter 0.5s; }
+    .galeria img:hover { transform: translateY(-8px) scale(1.03); filter: grayscale(0%) brightness(1.1); box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3); }
+    .small-hero { width: 100%; height: 450px; object-fit: cover; display: block; margin-top: 25px; border-radius: 8px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); filter: grayscale(60%); transition: filter 0.5s; }
+    .small-hero:hover { filter: grayscale(0%); }
+    .quote { margin: 35px auto; font-style: italic; color: var(--color-secundario); max-width: 90%; padding: 20px 30px; border-left: 8px solid var(--color-primario); line-height: 1.5; background: rgba(0, 37, 67, 0.04); border-radius: 4px; }
+
+    /* PAGINATION */
+    #pagination-controls {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .page-nav-btn {
+        background: var(--color-primario);
+        color: var(--color-claro);
+        border: none;
+        padding: 10px 25px;
+        font-size: 1.8rem;
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        box-shadow: var(--sombra-boton);
+        user-select: none;
+    }
+    .page-nav-btn:hover:not(:disabled) {
+        background: var(--color-secundario);
+        transform: scale(1.05);
+    }
+    .page-nav-btn:disabled {
+        background: #ccc;
+        color: #666;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+    #page-counter {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--texto-oscuro);
+        padding: 0 20px;
+    }
+
+    /* FOOTER */
+    footer { margin-top: 80px; background: var(--color-primario); color: var(--color-claro); text-align: center; padding: 35px; font-size: 0.85rem; border-top: 6px solid var(--color-secundario); }
+    
+    /* MEDIA QUERIES (Ajustado para el menú) */
+    @media (max-width: 768px) {
+        /* En móvil, el menú debe ser más estrecho y no desplazar tanto */
+        :root { --menu-width: 240px; }
+        header h1 { font-size: 1.8rem; }
+        .section-card { padding: 25px; margin: 30px 10px; }
+        .page-nav-btn { padding: 8px 20px; font-size: 1.5rem; }
+        #page-counter { font-size: 1rem; }
+        
+        /* Ajuste del header en móvil para que el título no interfiera */
+        header .banner-inner {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-left: 0;
+            padding-top: 20px;
+        }
+        #menuToggleBtn {
+            top: 15px;
+            left: 15px;
+        }
+        
+    }
+    @media (min-width: 769px) {
+        /* Para evitar que el content-wrapper mueva el body completo */
+        body { 
+            display: block; 
+            /* Se necesita un ajuste fino para que el footer no se separe */
+        }
+        .content-wrapper { 
+            min-height: calc(100vh - 129px); /* Altura de la vista menos footer */
+            display: flex;
+            flex-direction: column;
+        }
+        main { flex-grow: 1; }
+    }
+    
+    /* Esto es para que el footer se mueva con el content-wrapper */
+    .content-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+  </style>
+</head>
+<body id="body-main">
+  <div id="top" style="height:0;"></div>
+
+  <nav id="side-menu">
+    <ul id="menu-list">
+      </ul>
+  </nav>
+
+  <div class="content-wrapper">
+    
+    <header>
+      <button id="menuToggleBtn" aria-label="Abrir Menú de Navegación">☰</button>
+
+      <div class="banner-inner">
+        <div class="logo" aria-hidden="true">
+          <img src="https://i.imgur.com/sagSH6i.png">
+        </div>
+
+        <div style="min-width:260px; max-width:740px;">
+          <h1>Institución Etnoeducativa Siete de Agosto</h1>
+          <div class="sub">Edición Especial: Sembrando Identidad y Futuro</div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      
+      <section id="page-1" class="section-card active" aria-labelledby="page-1-title">
+        <h2 id="page-1-title">Página 1: Identidad Institucional y Propósito</h2>
+        <p>La Institución Etnoeducativa Siete de Agosto se define por su compromiso con la formación integral y la consolidación de la identidad étnica y cultural de sus estudiantes. Es un proyecto comunitario que ha forjado líderes y profesionales durante décadas.</p>
+        <p class="quote">“Comprometidos con la calidad educativa y el desarrollo integral de la comunidad, respetando siempre nuestra herencia cultural.”</p>
+         <div class="galeria">
+          <img src="https://i.imgur.com/xBmndjw.png" alt="Estudiantes en actividad cultural">
+          <img src="https://i.imgur.com/BC4c0UE.jpeg" alt="Fachada de la Institución Etnoeducativa">
+        </div>
+      </section>
+      
+      <section id="page-2" class="section-card" aria-labelledby="page-2-title">
+        <h2 id="page-2-title">Página 2: Gestión Académica y Calidad</h2>
+        <p>Nuestra gestión académica se enfoca en el desarrollo de competencias básicas y laborales. Contamos con políticas de calidad que guían el proceso de enseñanza-aprendizaje, preparando a los estudiantes para los desafíos del mundo moderno.</p>
+         <div class="galeria">
+          <img src="https://i.imgur.com/17C3W9d.jpeg" alt="Docentes en reunión de planeación">
+          <img src="https://i.imgur.com/ghS1jcz.jpeg" alt="Grupo de estudiantes en el aula">
+        </div>
+      </section>
+
+      <section id="page-3" class="section-card" aria-labelledby="page-3-title">
+        <h2 id="page-3-title">Página 3: Proyección Comunitaria y Valores</h2>
+        <p>La I.E.O. Siete de Agosto trasciende el aula. La gestión comunitaria busca la integración activa con el entorno local mediante talleres y actividades que impactan directamente en la calidad de vida de las familias.</p>
+        <img class="small-hero" src="https://i.imgur.com/pRcvyCr.jpeg" alt="Taller de capacitación con padres de familia">
+      </section>
+      
+      <section id="page-4" class="section-card" aria-labelledby="page-4-title">
+          <h2 id="page-4-title">Página 4: Vida Escolar y Cotidianidad</h2>
+          <p>El ambiente escolar en nuestra institución es vibrante. Fomentamos espacios de convivencia diaria donde se aprenden valores como el respeto y la autonomía a través de las interacciones cotidianas en el aula y los recesos.</p>
+          <div class="galeria">
+               <img src="https://i.imgur.com/nQWWTdw.jpeg" alt="Estudiantes compartiendo durante el recreo">
+               <img src="https://i.imgur.com/QBZ6Chi.jpeg" alt="Clase de ciencias con experimento">
+          </div>
+      </section>
+      
+      <section id="page-5" class="section-card" aria-labelledby="page-5-title">
+          <h2 id="page-5-title">Página 5: Salidas Pedagógicas y Recreación (Interclases)</h2>
+          <p>Las salidas pedagógicas amplían el conocimiento más allá de las paredes. Complementamos esto con las interclases, un espacio clave para el deporte, la sana competencia y el desarrollo de habilidades sociales y el trabajo en equipo.</p>
+          <div class="galeria">
+               <img src="https://i.imgur.com/VtBjTBh.jpeg" alt="Grupo de estudiantes en un parque natural">
+               <img src="https://i.imgur.com/uZgh2BX.jpeg" alt="Partido de baloncesto en interclases">
+          </div>
+      </section>
+      
+      <section id="page-6" class="section-card" aria-labelledby="page-6-title">
+          <h2 id="page-6-title">Página 6: Proyectos Ambientales (PRAE)</h2>
+          <p>El PRAE (Proyecto Ambiental Escolar) es nuestro compromiso con la sostenibilidad. Los estudiantes implementan prácticas de reciclaje, siembra y conservación del entorno, convirtiendo el campus en un laboratorio vivo.</p>
+          <div class="galeria">
+              <img src="https://i.imgur.com/ekyDkrE.jpeg" alt="Taller de reciclaje en el colegio">
+              <img src="https://i.imgur.com/RYQab38.jpeg" alt="Estudiantes sembrando un árbol">
+          </div>
+      </section>
+      
+      <section id="page-7" class="section-card" aria-labelledby="page-7-title">
+          <h2 id="page-7-title">Página 7: Convivencia Escolar y Arte (Murales)</h2>
+          <p>La convivencia se gestiona con principios de respeto y diálogo. El arte, como los murales del colegio, no solo embellece, sino que sirve como vehículo para expresar identidad y valores, creando un entorno armónico y creativo.</p>
+          <img class="small-hero" src="https://i.imgur.com/d74lxE2.png" alt="Mural artístico pintado por estudiantes">
+      </section>
+
+      <section id="page-8" class="section-card" aria-labelledby="page-8-title">
+          <h2 id="page-8-title">Página 8: Comunidad Educativa y Tradiciones (Marchas, Actos Cívicos)</h2>
+          <p>La comunidad educativa (padres, estudiantes y docentes) es el motor de la institución. Las marchas y actos cívicos son espacios vitales para reafirmar nuestra identidad, celebrar logros y mantener vivas las tradiciones culturales y etnoeducativas.</p>
+          <div class="galeria">
+              <img src="https://i.imgur.com/wWAjTUr.jpeg" alt="Acto cívico con izada de bandera">
+              <img src="https://i.imgur.com/u0jA6ST.jpeg" alt="Marcha escolar con pancartas">
+          </div>
+      </section>
+      
+      <section id="page-9" class="section-card" aria-labelledby="page-9-title">
+          <h2 id="page-9-title">Página 9: Salud, Bienestar y Restaurante Escolar</h2>
+          <p>El bienestar de nuestros estudiantes es primordial. El servicio de restaurante escolar garantiza una nutrición adecuada. Además, promovemos hábitos saludables a través de jornadas de salud preventiva y educación física.</p>
+          <div class="galeria">
+              <img src="https://i.imgur.com/zFBSL11.png" alt="Servicio de restaurante escolar">
+              <img src="https://i.imgur.com/2ZxeoBZ.png" alt="Examen médico a estudiante">
+          </div>
+      </section>
+
+    </main>
+    
+    <div id="pagination-controls">
+      <button id="prevPageBtn" class="page-nav-btn"><</button>
+      <span id="page-counter">Página 1 de 9</span>
+      <button id="nextPageBtn" class="page-nav-btn">></button>
+    </div>
+
+    <footer>
+      © 2025 Revista Digital IE Siete de Agosto – Desarrollado por Leonardo Sarasty y Jhon Fernando Monar
+    </footer>
+
+  </div>
+  
+  <a href="#top" class="scroll-to-top" id="scrollToTopBtn" aria-label="Ir al inicio de la página">↑</a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- 1. REFERENCIAS DOM Y VARIABLES ---
+        const pages = document.querySelectorAll('.section-card');
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        const pageCounter = document.getElementById('page-counter');
+        const menuToggleBtn = document.getElementById('menuToggleBtn'); // Nuevo
+        const menuList = document.getElementById('menu-list');         // Nuevo
+        const bodyMain = document.getElementById('body-main');          // Nuevo
+        const totalPages = pages.length;
+        let currentPage = 1;
+
+        // Ocultar elementos de la estructura anterior que ya no usamos
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        if (scrollToTopBtn) scrollToTopBtn.style.display = 'none';
+
+        // --- FUNCIONES DEL MENÚ LATERAL (NUEVO) ---
+
+        // 1. Rellena el menú con los títulos de las secciones
+        function populateMenu() {
+            pages.forEach((page, index) => {
+                const pageNum = index + 1;
+                const pageId = page.id;
+                // Obtenemos el texto del h2, eliminando el "Página X: "
+                const titleElement = page.querySelector('h2');
+                const titleText = titleElement ? titleElement.textContent.replace(`Página ${pageNum}: `, '') : `Página ${pageNum}`;
+                
+                const listItem = document.createElement('li');
+                listItem.setAttribute('data-page', pageNum);
+                
+                const link = document.createElement('a');
+                link.href = `#${pageId}`;
+                link.textContent = `${pageNum}. ${titleText}`;
+                
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Evita el salto por defecto del ancla
+                    currentPage = pageNum;
+                    renderPage();
+                    closeMenu(); // Cierra el menú al navegar
+                });
+
+                listItem.appendChild(link);
+                menuList.appendChild(listItem);
+            });
+        }
+        
+        // 2. Control del menú (abrir/cerrar)
+        function toggleMenu() {
+            bodyMain.classList.toggle('menu-open');
+            const isOpen = bodyMain.classList.contains('menu-open');
+            menuToggleBtn.textContent = isOpen ? '✕' : '☰'; // Cambia el icono
+            menuToggleBtn.setAttribute('aria-expanded', isOpen);
+        }
+
+        function closeMenu() {
+            bodyMain.classList.remove('menu-open');
+            menuToggleBtn.textContent = '☰';
+            menuToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        menuToggleBtn.addEventListener('click', toggleMenu);
+
+
+        // --- 2. FUNCIÓN DE RENDERIZADO DE PÁGINA (MODIFICADA) ---
+        function renderPage(animate = true) {
+            // 1. Ocultar todas las páginas
+            pages.forEach(page => {
+                page.classList.remove('active', 'flip-animate');
+            });
+
+            // 2. Mostrar solo la página actual
+            const currentSection = document.getElementById(`page-${currentPage}`);
+            if (currentSection) {
+                currentSection.classList.add('active');
+                if (animate) {
+                    currentSection.classList.add('flip-animate'); 
+                }
+            }
+
+            // 3. Actualizar el contador
+            pageCounter.textContent = `Página ${currentPage} de ${totalPages}`;
+
+            // 4. Actualizar botones de navegación
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+
+            // 5. Destacar el enlace activo en el menú (NUEVO)
+            document.querySelectorAll('#menu-list li').forEach(item => {
+                item.classList.remove('current-page');
+            });
+            const currentMenuItem = document.querySelector(`#menu-list li[data-page="${currentPage}"]`);
+            if (currentMenuItem) {
+                currentMenuItem.classList.add('current-page');
+            }
+
+            // 6. Scroll al inicio de la revista
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 3. LÓGICA DE NAVEGACIÓN ---
+        function changePage(direction) {
+            if (direction === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            }
+            renderPage();
+        }
+
+        prevBtn.addEventListener('click', () => changePage('prev'));
+        nextBtn.addEventListener('click', () => changePage('next'));
+
+        // Permitir navegar con las teclas de flecha
+        document.addEventListener('keydown', (e) => {
+            if (bodyMain.classList.contains('menu-open')) return; // No navegar si el menú está abierto
+            if (e.key === 'ArrowRight') {
+                changePage('next');
+            } else if (e.key === 'ArrowLeft') {
+                changePage('prev');
+            }
+        });
+        
+        // Cierra el menú si se presiona ESC (NUEVO)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && bodyMain.classList.contains('menu-open')) {
+                closeMenu();
+            }
+        });
+
+
+        // --- 4. INICIALIZACIÓN ---
+        populateMenu(); // Rellena el menú al inicio
+        renderPage(false); 
+    });
+  </script>
+</body>
+</html>
